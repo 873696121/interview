@@ -3,30 +3,32 @@ package concurrent;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-/**
- * @author HuHong
- * @date 2021/9/15
- */
+/***********************************************************                                          *
+ * Time: 2021/9/16
+ * Author: HuHong
+ * Desc:
+ ***********************************************************/
+
 public class MyPrint extends Thread{
 
-    private static int sequence;
+    private static int sequence = 0;
     private static final int FINAL_SEQUENCE = 100;
 
     private int id;
-    private Condition[] conditions;
     private ReentrantLock lock;
+    private Condition[] conditions;
 
-    public MyPrint(int id, Condition[] conditions, ReentrantLock lock) {
+    public MyPrint(int id, ReentrantLock lock, Condition[] conditions) {
         this.id = id;
-        this.conditions = conditions;
         this.lock = lock;
+        this.conditions = conditions;
     }
 
     @Override
     public void run() {
         while(sequence >= 0 && sequence < FINAL_SEQUENCE){
+            lock.lock();
             try {
-                lock.lock();
                 if(sequence % conditions.length != id){
                     conditions[sequence % conditions.length].signal();
                     conditions[id].await();
@@ -42,18 +44,22 @@ public class MyPrint extends Thread{
             }
         }
         lock.lock();
-        conditions[(id + 1) % conditions.length].signal();
+        for (int i = 0; i < conditions.length; i++) {
+            conditions[i].signal();
+        }
         lock.unlock();
     }
 
     public static void main(String[] args) {
-        int threadCount = 4;
+        int threadCount = 3;
         Condition[] conditions = new Condition[threadCount];
-        MyPrint[] myPrints = new MyPrint[threadCount];
         ReentrantLock lock = new ReentrantLock();
-        for (int i = 0; i < conditions.length; i++) {
+        MyPrint[] myPrints = new MyPrint[threadCount];
+        for (int i = 0; i < threadCount; i++) {
             conditions[i] = lock.newCondition();
-            myPrints[i] = new MyPrint(i, conditions, lock);
+            myPrints[i] = new MyPrint(i, lock, conditions);
+        }
+        for (int i = 0; i < threadCount; i++) {
             myPrints[i].start();
         }
     }
