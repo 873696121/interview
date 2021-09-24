@@ -19,11 +19,31 @@ import org.springframework.stereotype.Component;
 @Component
 public class MyLog {
 
+    private static int helloCnt = 0;
+
     private Logger logger = LoggerFactory.getLogger(MyLog.class);
 
-    @Pointcut(value = "execution(* aop.controller.*.*(..))")
+    public static int getHelloCnt() {
+        return helloCnt;
+    }
+
+    @Pointcut(value = "execution(* aop.controller.*.*(String, String))")
     public void myPointcut(){
 
+    }
+
+    @Pointcut(value = "execution(* aop.controller.*.*(String))")
+    public void setHelloCnt(){
+
+    }
+
+    @Around("setHelloCnt()")
+    public synchronized Object myCnt(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+//        logger.info("\n调用前: " + helloCnt);
+        Object o = proceedingJoinPoint.proceed();
+        helloCnt ++;
+//        logger.info("调用后: " + helloCnt);
+        return o;
     }
 
 

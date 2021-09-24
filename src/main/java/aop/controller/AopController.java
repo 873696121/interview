@@ -1,5 +1,6 @@
 package aop.controller;
 
+import aop.aspect.MyLog;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,6 +29,11 @@ public class AopController {
     @GetMapping("bye")
     public String bye(@RequestParam String name){
         return "bye, " + name;
+    }
+
+    @GetMapping("cnt")
+    public String getCnt(){
+        return String.valueOf(MyLog.getHelloCnt());
     }
 
 }
