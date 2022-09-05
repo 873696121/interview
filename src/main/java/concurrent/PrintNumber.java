@@ -8,17 +8,16 @@ public class PrintNumber extends Thread {
     /**
      * 多个线程共享这一个sequence数据
      */
-    private static int sequence=0;
+    private static int sequence = 0;
 
-    private static final int SEQUENCE_END =75;
+    private static final int SEQUENCE_END = 75;
 
     private Integer id;
     private ReentrantLock lock;
     private Condition[] conditions;
 
 
-
-    private PrintNumber(Integer id,  ReentrantLock lock, Condition[] conditions) {
+    private PrintNumber(Integer id, ReentrantLock lock, Condition[] conditions) {
         this.id = id;
         this.setName("thread" + id);
         this.lock = lock;

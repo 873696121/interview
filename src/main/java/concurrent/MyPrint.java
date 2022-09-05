@@ -9,7 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * Desc:
  ***********************************************************/
 
-public class MyPrint extends Thread{
+public class MyPrint extends Thread {
 
     private static int sequence = 0;
     private static final int FINAL_SEQUENCE = 100;
@@ -26,20 +26,20 @@ public class MyPrint extends Thread{
 
     @Override
     public void run() {
-        while(sequence >= 0 && sequence < FINAL_SEQUENCE){
+        while (sequence >= 0 && sequence < FINAL_SEQUENCE) {
             lock.lock();
             try {
-                if(sequence % conditions.length != id){
+                if (sequence % conditions.length != id) {
                     conditions[sequence % conditions.length].signal();
                     conditions[id].await();
                 }
                 System.out.println(Thread.currentThread().getName() + " " + sequence);
-                sequence ++;
+                sequence++;
                 conditions[sequence % conditions.length].signal();
                 conditions[id].await();
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 lock.unlock();
             }
         }

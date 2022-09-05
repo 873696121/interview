@@ -14,8 +14,8 @@ public class PrintTest {
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    while(ticket.getNum() > 0){
-                        if(ticket.getNum() % 3 == t){
+                    while (ticket.getNum() > 0) {
+                        if (ticket.getNum() % 3 == t) {
                             ticket.print(t);
                         }
                     }

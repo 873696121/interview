@@ -19,9 +19,9 @@ public class Ticket {
         this.num = num;
     }
 
-    public synchronized void print(int t){
-        if(num > 0) {
-            num --;
+    public synchronized void print(int t) {
+        if (num > 0) {
+            num--;
             System.out.println(t + "    卖出了一张票，还剩" + num + "张票");
         }
     }

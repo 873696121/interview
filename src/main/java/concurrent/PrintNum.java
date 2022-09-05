@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author HuHong
  * @date 2021/9/15
  */
-public class PrintNum extends Thread{
+public class PrintNum extends Thread {
 
     private static int sequence = 0;
     private static int FINAL_SEQUENCE = 75;
@@ -29,22 +29,22 @@ public class PrintNum extends Thread{
 
     @Override
     public void run() {
-        while(sequence >= 0 && sequence < FINAL_SEQUENCE){
+        while (sequence >= 0 && sequence < FINAL_SEQUENCE) {
             lock.lock();
             try {
-                if(sequence % conditions.length != id){
+                if (sequence % conditions.length != id) {
                     conditions[sequence % conditions.length].signal();
                     conditions[id].await();
                 }
-                System.out.println(Thread.currentThread().getName() + " " + (char)(id + 'A'));
-                sequence ++;
+                System.out.println(Thread.currentThread().getName() + " " + (char) (id + 'A'));
+                sequence++;
                 conditions[sequence % conditions.length].signal();
                 conditions[id].await();
 
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 lock.unlock();
             }
         }
